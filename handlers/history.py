@@ -8,7 +8,7 @@ router = Router()
 @router.message(F.text == "📖 История")
 async def show_history(message: types.Message):
     user_id = message.from_user.id
-    workouts = get_progress(user_id)  # 🔥 Всегда берём актуальные данные
+    workouts = get_progress(user_id)  # Всегда берём актуальные данные
 
     if not workouts:
         await message.answer("❌ У вас нет сохранённых тренировок.")
