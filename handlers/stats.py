@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 router = Router()
 
 
-# ✅ Генерация графика по всем данным
+# Генерация графика по всем данным
 def generate_graph(user_id):
     workouts = get_progress(user_id)
     if not workouts:
@@ -46,7 +46,7 @@ def generate_graph(user_id):
     return buffer
 
 
-# ✅ Показ статистики и графика с кнопками удаления
+# Показ статистики и графика с кнопками удаления
 async def show_stats_by_category(message: types.Message, state: FSMContext):
     user_id = message.from_user.id
     await state.clear()
@@ -63,7 +63,7 @@ async def show_stats_by_category(message: types.Message, state: FSMContext):
         workout_id, cat, exercise, reps, weight, date = workout
         response += f"ID: `{workout_id}`, Упражнение: {exercise}, Повторения: {reps}, Вес: {weight} кг, Дата: {date}\n"
 
-        # ✅ Добавляем инлайн-кнопку для удаления записи
+        # Добавляем инлайн-кнопку для удаления записи
         buttons.append([
             types.InlineKeyboardButton(
                 text=f"🗑 Удалить ID {workout_id}",
@@ -73,10 +73,10 @@ async def show_stats_by_category(message: types.Message, state: FSMContext):
 
     keyboard = types.InlineKeyboardMarkup(inline_keyboard=buttons)
 
-    # ✅ Отправляем сообщение с кнопками
+    # Отправляем сообщение с кнопками
     await message.answer(response, parse_mode="Markdown", reply_markup=keyboard)
 
-    # ✅ Генерация графика
+    # Генерация графика
     graph = generate_graph(user_id)
     if graph:
         await message.answer_photo(types.BufferedInputFile(graph.getvalue(), filename="stats.png"))
@@ -84,16 +84,16 @@ async def show_stats_by_category(message: types.Message, state: FSMContext):
         await message.answer("📊 Недостаточно данных для построения графика.")
 
 
-# ✅ Обработка удаления через инлайн-кнопку
+# Обработка удаления через инлайн-кнопку
 @router.callback_query(lambda c: c.data.startswith('delete_'))
 async def delete_record_callback(callback_query: types.CallbackQuery):
     try:
         record_id = int(callback_query.data.split('_')[1])
 
-        # ✅ Удаляем запись из базы данных
+        # Удаляем запись из базы данных
         delete_progress(record_id)
 
-        # ✅ Удаляем кнопку и обновляем текст сообщения
+        # Удаляем кнопку и обновляем текст сообщения
         updated_text = callback_query.message.text.replace(
             f"🗑 Удалить ID {record_id}\n", ""
         )
@@ -103,14 +103,14 @@ async def delete_record_callback(callback_query: types.CallbackQuery):
 
         await callback_query.message.edit_text(updated_text, parse_mode="Markdown")
 
-        # ✅ Показываем уведомление о том, что запись удалена
+        # Показываем уведомление о том, что запись удалена
         await callback_query.answer("✅ Запись удалена.")
 
     except Exception as e:
         await callback_query.message.answer(f"❌ Ошибка при удалении: {e}")
 
 
-# ✅ Команда /stats
+# Команда /stats
 @router.message(Command("stats"))
 @router.message(F.text == "📊 Статистика")
 async def show_stats(message: types.Message, state: FSMContext):
