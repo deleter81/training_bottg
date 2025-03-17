@@ -5,7 +5,7 @@ from database.db import delete_progress, get_progress
 router = Router()
 
 
-# ✅ Показ статистики с кнопками для удаления
+# Показ статистики с кнопками для удаления
 @router.message(Command("stats"))
 @router.message(F.text == "📊 Статистика")
 async def show_stats(message: types.Message):
@@ -21,7 +21,7 @@ async def show_stats(message: types.Message):
     for workout in workouts:
         workout_id, cat, exercise, reps, weight, date = workout
         response += f"ID: `{workout_id}`, Упражнение: {exercise}, Повторения: {reps}, Вес: {weight} кг, Дата: {date}\n"
-        # ✅ Создаём inline-кнопку для удаления с callback_data
+        # Создаём inline-кнопку для удаления с callback_data
         buttons.append([
             types.InlineKeyboardButton(
                 text=f"🗑 Удалить ID {workout_id}",
@@ -34,7 +34,7 @@ async def show_stats(message: types.Message):
     await message.answer(response, parse_mode="Markdown", reply_markup=keyboard)
 
 
-# ✅ Удаление через callback-кнопку
+# Удаление через callback-кнопку
 @router.callback_query(lambda c: c.data.startswith('delete_'))
 async def delete_record_callback(callback_query: types.CallbackQuery):
     try:
@@ -46,7 +46,7 @@ async def delete_record_callback(callback_query: types.CallbackQuery):
         await callback_query.message.answer(f"❌ Ошибка при удалении: {e}")
 
 
-# ✅ Удаление через текстовую команду
+# Удаление через текстовую команду
 @router.message(Command("delete"))
 async def delete_record(message: types.Message):
     try:
