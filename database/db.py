@@ -2,7 +2,7 @@ import mysql.connector
 from mysql.connector import Error
 from config import DB_CONFIG
 
-# ✅ Подключение к базе данных
+# Подключение к базе данных
 def connect():
     try:
         conn = mysql.connector.connect(**DB_CONFIG)
@@ -13,7 +13,7 @@ def connect():
         print(f"❌ Ошибка подключения к базе данных: {e}")
         return None
 
-# ✅ Добавление данных
+# Добавление данных
 def add_progress(user_id, exercise, category, reps, weight, date):
     conn = connect()
     if conn:
@@ -32,7 +32,7 @@ def add_progress(user_id, exercise, category, reps, weight, date):
         finally:
             conn.close()
 
-# ✅ Получение данных
+# Получение данных
 def get_progress(user_id):
     conn = connect()
     if conn:
@@ -54,7 +54,7 @@ def get_progress(user_id):
             conn.close()
     return []
 
-# ✅ УДАЛЕНИЕ данных
+# УДАЛЕНИЕ данных
 def delete_progress(record_id):
     conn = connect()
     if conn:
@@ -74,7 +74,7 @@ def convert_date(date_str):
     day, month, year = date_str.split('.')
     return f"{year}-{month}-{day}"
 
-# ✅ ОБНОВЛЕНИЕ данных с категорией
+# Обновление данных с категорией
 def update_progress(workout_id, category, exercise, reps, weight, date):
     conn = connect()
     if conn:
@@ -94,5 +94,5 @@ def update_progress(workout_id, category, exercise, reps, weight, date):
         finally:
             conn.close()
 
-# ✅ Экспортируем функции для импорта в другие модули
+# Экспортируем функции для импорта в другие модули
 __all__ = ["add_progress", "get_progress", "delete_progress", "update_progress"]
